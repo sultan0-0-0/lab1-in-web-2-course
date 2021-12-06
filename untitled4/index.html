@@ -4,6 +4,7 @@
 
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="css/styles.css">
+  <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
   <script type="text/javascript">
 
     function ajaxRequest() {
@@ -74,6 +75,30 @@
         document.getElementById("error").textContent = "";
         return true;}
     }
+    document.addEventListener("DOMContentLoaded",function (ev){
+
+      document.getElementById("submit").addEventListener("click",function (e){
+
+        e.preventDefault();
+        let rawX;
+        let inputX = document.querySelectorAll("input[name='x']");
+        for (let i = 0; i<inputX.length; i++){
+          if (inputX[i].checked){
+            rawX = inputX[i].value;
+            break;
+          }
+        }
+        $.ajax({
+          url: '/work.php',         /* Куда пойдет запрос */
+          method: 'GET',             /* Метод передачи (post или get) */
+          data: {x: rawX, y:document.querySelector("input[name='y']").value, r:document.querySelector("input[name='r']").value},     /* Параметры передаваемые в запросе. */
+          success: function(data){   /* функция которая будет выполнена после успешного запроса.  */
+            document.getElementById("div-result").innerHTML = document.getElementById("div-result").innerHTML + data;           /* В переменной data содержится ответ от index.php. */
+          }
+        });
+      })
+    })
+
 
   </script>
   <title>Лабораторная работа по Web-программированию №1</title>
@@ -103,19 +128,19 @@
     <input type="radio" name="x" value="2">2
     <br>
     Введите Y:
-    <input type="text"  placeholder="-5...3" name="y" >
+    <input type="text"  placeholder="-5...3" name="y" maxlength="7">
     <br>
     Выберите R:
-    <input type="text"  placeholder="1...4" name="r" >
+    <input type="text"  placeholder="1...4" name="r" maxlength="7">
     <br>
     <input type="submit" id="submit">
   </form>
   <br>
   <span id="error"></span>
 </div>
-<div text-align="center" class="block" id="div-result" style="display: none">
-  <iframe id="result" name="result" scrolling="no" frameborder="no" ></iframe>
-</div>
+<table text-align="center" class="block" id="div-result">
+
+</table>
 <div class="footer block">
   2021г.
 </div>
